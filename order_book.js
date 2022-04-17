@@ -11,7 +11,7 @@ const utils = require("./utils");
 class OrderBook {
   #pricePoints;
   #limitOrders;
-  #bid; #ask;
+  #ask; #bid;
   #trades;
   #statusRegistry;
 
