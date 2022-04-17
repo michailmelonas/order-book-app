@@ -1,0 +1,22 @@
+{
+  "name": "order_book",
+  "version": "1.0.0",
+  "description": "A simple order book implementation",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Michail Melonas",
+  "license": "ISC",
+  "dependencies": {
+    "date-and-time": "^2.3.1",
+    "denque": "^2.0.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  }
+}
