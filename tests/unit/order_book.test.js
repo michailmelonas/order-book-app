@@ -1,4 +1,4 @@
-const OrderBook = require("../../order_book");
+const OrderBook = require("../../order_book/order_book");
 
 describe("order_book.OrderBook.constructor", () => {
   it("should throw an error with pricePoints less than 1", () => {
