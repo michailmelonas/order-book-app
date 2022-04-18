@@ -1,4 +1,4 @@
-const LimitOrder = require("../../order_book/limit_order");
+const LimitOrder = require("../../../order_book/limit_order");
 
 describe("limit_order.LimitOrder.constructor", () => {
   it("should create a LimitOrder instance", () => {

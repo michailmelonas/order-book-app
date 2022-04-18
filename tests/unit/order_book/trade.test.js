@@ -1,4 +1,4 @@
-const Trade = require("../../order_book/trade");
+const Trade = require("../../../order_book/trade");
 
 describe("trade.Trade.constructor", () => {
   it("should create a Trade instance", () => {

@@ -1,4 +1,4 @@
-const Status = require("../../order_book/status");
+const Status = require("../../../order_book/status");
 
 describe("status.Status.constructor", () => {
   it("should create a Status instance", () => {
