@@ -192,9 +192,11 @@ class OrderBook {
   }
 
   #getNearestPriceWithVolume(price, increment) {
-    if (price < 1 || price > this.#pricePoints) return null;
-    if (this.#limitOrders[price].length > 0) return price;
-    return this.#getNearestPriceWithVolume(price + increment, increment);
+    while (price >= 1 && price <= this.#pricePoints) {
+      if (this.#limitOrders[price].length > 0) return price;
+      price += increment;
+    };
+    return null;
   }
 }
 
