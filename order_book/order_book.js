@@ -42,14 +42,14 @@ class OrderBook {
     if (this.#ask !== null) {
       for (let price = this.#ask; price <= this.#pricePoints; price++) {
         fullOrderBook.Asks.push(
-          ...utils.parseLimitOrdersToIndividual(this.#limitOrders[price].toArray(), "SELL")
+          ...utils.parseLimitOrders(this.#limitOrders[price].toArray(), "SELL")
         );
       };
     };
     if (this.#bid !== null) {
       for (let price = this.#bid; price >= 1; price--) {
         fullOrderBook.Bids.push(
-          ...utils.parseLimitOrdersToIndividual(this.#limitOrders[price].toArray(), "BUY")
+          ...utils.parseLimitOrders(this.#limitOrders[price].toArray(), "BUY")
         );
       };
     };
@@ -58,8 +58,8 @@ class OrderBook {
 
   get aggregatedOrderBook() {
     return {
-      Asks: utils.parseLimitOrdersToAggregated(this.fullOrderBook.Asks, false),
-      Bids: utils.parseLimitOrdersToAggregated(this.fullOrderBook.Bids, true)
+      Asks: utils.parseParsedLimitOrdersToAggregated(this.fullOrderBook.Asks, false),
+      Bids: utils.parseParsedLimitOrdersToAggregated(this.fullOrderBook.Bids, true)
     };
   }
 

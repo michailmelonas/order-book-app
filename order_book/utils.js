@@ -1,21 +1,6 @@
 const date = require("date-and-time");
 
-module.exports.parseLimitOrdersToAggregated = function(orders, reverse) { // consider rename
-  const result = orders.reduce((result, currentValue) => {
-    if (!result[currentValue.price]) {
-      result[currentValue.price] = {
-        price: currentValue.price, quantity: 0, side: currentValue.side, orderCount: 0
-      };
-    };
-    result[currentValue.price].quantity += currentValue.quantity;
-    result[currentValue.price].orderCount += 1
-    return result;
-  }, {});
-  if (reverse) return Object.values(result).reverse();
-  return Object.values(result);
-}
-
-module.exports.parseLimitOrdersToIndividual = function(orders, side) {
+module.exports.parseLimitOrders = function(orders, side) {
   return orders.map((o, i) => ({
     price: o.price, quantity: o.quantity, positionAtPrice: i+1, side: side, id: o.id
   }));
@@ -34,6 +19,21 @@ module.exports.parseOrderStatus = function(orderStatus) {
     status: orderStatus.status,
     cancelReason: orderStatus.cancelReason
   }
+}
+
+module.exports.parseParsedLimitOrdersToAggregated = function(orders, reverse) {
+  const result = orders.reduce((result, currentValue) => {
+    if (!result[currentValue.price]) {
+      result[currentValue.price] = {
+        price: currentValue.price, quantity: 0, side: currentValue.side, orderCount: 0
+      };
+    };
+    result[currentValue.price].quantity += currentValue.quantity;
+    result[currentValue.price].orderCount += 1
+    return result;
+  }, {});
+  if (reverse) return Object.values(result).reverse();
+  return Object.values(result);
 }
 
 module.exports.parseTrades = function(trades) {
