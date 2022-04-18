@@ -6,8 +6,6 @@ const orderBook = require("./routes/order_book");
 const app = express();
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use("/api", orderBook);
+app.use("/api", orderBook.router);
 
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+module.exports = app;
