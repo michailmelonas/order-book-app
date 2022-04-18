@@ -21,7 +21,11 @@ class OrderBook {
     };
 
     this.#pricePoints = pricePoints;
-    this.#limitOrders = Array.from({length: this.#pricePoints}, e => new Denque());
+    // Dictionary of queues: for each legal price, an empty queue is created
+    this.#limitOrders = [...Array(pricePoints).keys()].reduce((result, currentValue) => {
+      result[currentValue + 1] = new Denque();
+      return result
+    }, {});
     this.#ask = null; this.#bid = null;
     this.#trades = [];
     this.#statusRegistry = {};
@@ -38,14 +42,14 @@ class OrderBook {
     if (this.#ask !== null) {
       for (let price = this.#ask; price <= this.#pricePoints; price++) {
         fullOrderBook.Asks.push(
-          ...utils.parseLimitOrdersToIndividual(this.#limitOrders[price - 1].toArray(), "SELL")
+          ...utils.parseLimitOrdersToIndividual(this.#limitOrders[price].toArray(), "SELL")
         );
       };
     };
     if (this.#bid !== null) {
       for (let price = this.#bid; price >= 1; price--) {
         fullOrderBook.Bids.push(
-          ...utils.parseLimitOrdersToIndividual(this.#limitOrders[price - 1].toArray(), "BUY")
+          ...utils.parseLimitOrdersToIndividual(this.#limitOrders[price].toArray(), "BUY")
         );
       };
     };
@@ -61,16 +65,16 @@ class OrderBook {
 
   get marketSummary() {
     const lastTrade = this.#trades[this.#trades.length - 1]
-    const limitOrdersAtAsk = this.#limitOrders[this.#ask - 1];
-    const limitOrdersAtBid = this.#limitOrders[this.#bid - 1];
+    const limitOrdersAtAsk = this.#limitOrders[this.#ask];
+    const limitOrdersAtBid = this.#limitOrders[this.#bid];
 
     return {
       "ask": this.#ask,
       "bid": this.#bid,
       "lastTradedPrice": lastTrade ? lastTrade.price : null,
       "lastTradeTime": lastTrade ? date.format(lastTrade.dateCreated, "YYYY/MM/DD HH:mm:SSS") : null,
-      "askVolume": limitOrdersAtAsk ? limitOrdersAtAsk.toArray().reduce((res, currentValue) => res + currentValue.quantity, 0) : null,
-      "bidVolume": limitOrdersAtBid ? limitOrdersAtBid.toArray().reduce((res, currentValue) => res + currentValue.quantity, 0) : null
+      "askVolume": limitOrdersAtAsk ? limitOrdersAtAsk.toArray().reduce((result, currentValue) => result + currentValue.quantity, 0) : null,
+      "bidVolume": limitOrdersAtBid ? limitOrdersAtBid.toArray().reduce((result, currentValue) => result + currentValue.quantity, 0) : null
     };
   }
 
@@ -81,7 +85,7 @@ class OrderBook {
     return utils.parseOrderStatus(this.#statusRegistry[id]);
   }
 
-  getTradeHistory(count) {
+  getRecentTradeHistory(count) {
     if (!Number.isInteger(count) || count < 1) {
       throw new Error(`count (${count}) must be a positive integer`);
     };
@@ -159,13 +163,13 @@ class OrderBook {
   };
 
   #trade(side, price, quantity, id, dateCreated) {
-    const order = this.#limitOrders[price - 1].peekFront();
+    const order = this.#limitOrders[price].peekFront();
     if (quantity >= order.quantity) {
       this.#trades.push(new Trade(price, order.quantity, side, dateCreated));
       this.#statusRegistry[order.id].fillExistingOrder(dateCreated, order.quantity);
       this.#statusRegistry[id].fillNewOrder(dateCreated, order.quantity);
       quantity -= order.quantity;
-      this.#limitOrders[price - 1].shift();
+      this.#limitOrders[price].shift();
     } else {
       this.#trades.push(new Trade(price, quantity, side, dateCreated));
       this.#statusRegistry[order.id].fillExistingOrder(dateCreated, quantity);
@@ -183,13 +187,13 @@ class OrderBook {
       if (this.#ask === null || price < this.#ask) this.#ask = price;
     };
 
-    this.#limitOrders[price - 1].push(new LimitOrder(price, quantity, id, dateCreated));
+    this.#limitOrders[price].push(new LimitOrder(price, quantity, id, dateCreated));
     this.#statusRegistry[id].setOrderStatusToPlaced(dateCreated);
   }
 
   #getNearestPriceWithVolume(price, increment) {
     if (price < 1 || price > this.#pricePoints) return null;
-    if (this.#limitOrders[price - 1].length > 0) return price;
+    if (this.#limitOrders[price].length > 0) return price;
     return this.#getNearestPriceWithVolume(price + increment, increment);
   }
 }
