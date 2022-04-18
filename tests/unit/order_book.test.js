@@ -189,22 +189,22 @@ describe("order_book.OrderBook.getStatus", () => {
   });
 });
 
-describe("order_book.OrderBook.getTradeHistory", () => {
+describe("order_book.OrderBook.getRecentTradeHistory", () => {
   it("should throw an error with count not an integer", () => {
     const orderBook = new OrderBook(5);
 
-    expect(() => orderBook.getTradeHistory(1.1)).toThrow();
+    expect(() => orderBook.getRecentTradeHistory(1.1)).toThrow();
   });
 
   it("should throw an error with count less than 1", () => {
     const orderBook = new OrderBook(5);
 
-    expect(() => orderBook.getTradeHistory(0)).toThrow();
+    expect(() => orderBook.getRecentTradeHistory(0)).toThrow();
   });
 
   it("should return empty trade history when no trades have taken place", () => {
     const orderBook = new OrderBook(5);
-    const tradeHistory = orderBook.getTradeHistory(1);
+    const tradeHistory = orderBook.getRecentTradeHistory(1);
 
     expect(tradeHistory.length).toBe(0);
   });
@@ -217,7 +217,7 @@ describe("order_book.OrderBook.getTradeHistory", () => {
     orderBook.attemptLimitOrder("SELL", 3, 5, false);
     orderBook.attemptLimitOrder("BUY", 3, 4, false);
 
-    const tradeHistory = orderBook.getTradeHistory(2);
+    const tradeHistory = orderBook.getRecentTradeHistory(2);
 
     expect(tradeHistory.length).toBe(2);
     expect(tradeHistory[0].price).toBe(3);
