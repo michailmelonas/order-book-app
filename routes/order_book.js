@@ -45,8 +45,9 @@ router.post("/orders/limit", (req, res) => {
       req.body.side, parseInt(req.body.price), parseInt(req.body.quantity), req.body.postOnly
     );
   }
-  catch(err) { return res.status(400).send(err.message); }
-  res.send(id);
+  catch(err) { return res.status(404).send(err.message); }
+  res.send({id: id});
 });
 
-module.exports = router;
+module.exports.router = router;
+module.exports.orderBook = orderBook;
