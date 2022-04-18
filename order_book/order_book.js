@@ -17,7 +17,7 @@ class OrderBook {
 
   constructor(pricePoints) {
     if (!Number.isInteger(pricePoints) || pricePoints < 1) {
-      throw new Error(`pricePoints (${pricePoints}) must be at least 1`);
+      throw new Error(`pricePoints (${pricePoints}) must be a positive integer`);
     };
 
     this.#pricePoints = pricePoints;
