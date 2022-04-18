@@ -18,7 +18,7 @@ module.exports.parseOrderStatus = function(orderStatus) {
     remainingQuantity: orderStatus.remainingQuantity,
     status: orderStatus.status,
     cancelReason: orderStatus.cancelReason
-  }
+  };
 }
 
 module.exports.parseParsedLimitOrdersToAggregated = function(orders, reverse) {
@@ -29,7 +29,7 @@ module.exports.parseParsedLimitOrdersToAggregated = function(orders, reverse) {
       };
     };
     result[currentValue.price].quantity += currentValue.quantity;
-    result[currentValue.price].orderCount += 1
+    result[currentValue.price].orderCount += 1;
     return result;
   }, {});
   if (reverse) return Object.values(result).reverse();
