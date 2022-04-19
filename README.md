@@ -1,7 +1,7 @@
 # order-book-app
 Simple application that implements an in-memory order book using a dictionary of queues to keep track of orders at each price point.
 
-To run the application locally, execute `npm install` followed by `node server.js`. The application should start listening at port 3000. 
+To run the application locally, execute `npm install` followed by `node server.js`. The application should start listening at port 3000.
 
 ## API
 
@@ -51,4 +51,4 @@ Parameters:
 
 `postOnly`: `true` or `false`
 
-Note that the order book requires both price and quantity to be positive integer values (specified as string literals), and that the maximum price is fixed at 1000000.
+Note that the order book requires both `price` and `quantity` to be positive integer values (specified as string literals), and that the maximum price is fixed at `1000000`.
